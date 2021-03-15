@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import throttle from "lodash/throttle";
 import Overlay from "../../components/Overlay/Overlay";
@@ -16,23 +18,45 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
+// const StyledNav = styled.nav<{ showMenu: boolean }>`
+//   position: fixed;
+//   top: ${({ showMenu }) => (showMenu ? 0 : `-${MENU_HEIGHT}px`)};
+//   left: 0;
+//   transition: top 0.2s;
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   padding-left: 8px;
+//   padding-right: 16px;
+//   width: 100%;
+//   height: ${MENU_HEIGHT}px;
+//   background-color: ${({ theme }) => theme.nav.background};
+//   border-bottom: solid 2px rgba(133, 133, 133, 0.1);
+//   z-index: 20;
+//   transform: translate3d(0, 0, 0);
+// `;
+
 const StyledNav = styled.nav<{ showMenu: boolean }>`
-  position: fixed;
-  top: ${({ showMenu }) => (showMenu ? 0 : `-${MENU_HEIGHT}px`)};
-  left: 0;
-  transition: top 0.2s;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 8px;
-  padding-right: 16px;
-  width: 100%;
-  height: ${MENU_HEIGHT}px;
-  background-color: ${({ theme }) => theme.nav.background};
-  border-bottom: solid 2px rgba(133, 133, 133, 0.1);
-  z-index: 20;
-  transform: translate3d(0, 0, 0);
+  background-color: white;
+  width: 100vw;
 `;
+
+const NavList = styled.ul`
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  list-style: none;
+  padding: 25px 0;
+`;
+
+const MenuItem = styled.li`
+  padding: 0 24px;
+
+  &:not(:last-child) {
+    border-right: solid 1px #000;
+  }
+`
 
 const BodyWrapper = styled.div`
   position: relative;
@@ -122,12 +146,19 @@ const Menu: React.FC<NavProps> = ({
           isDark={isDark}
           href={homeLink?.href ?? "/"}
         />
+        <NavList>
+          {links && links.map((entry) => (
+            <MenuItem>
+              <NavLink to={entry.href || ''}>{entry.label}</NavLink>
+            </MenuItem>
+          ))}
+        </NavList>
         <Flex>
           <UserBlock account={account} login={login} logout={logout} />
           {profile && <Avatar profile={profile} />}
         </Flex>
       </StyledNav>
-      <BodyWrapper>
+      {/* <BodyWrapper>
         <Panel
           isPushed={isPushed}
           isMobile={isMobile}
@@ -145,7 +176,7 @@ const Menu: React.FC<NavProps> = ({
           {children}
         </Inner>
         <MobileOnlyOverlay show={isPushed} onClick={() => setIsPushed(false)} role="presentation" />
-      </BodyWrapper>
+      </BodyWrapper> */}
     </Wrapper>
   );
 };
